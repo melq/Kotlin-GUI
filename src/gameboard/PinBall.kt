@@ -1,6 +1,6 @@
 package gameboard
 
-import gameboard.drawable.Ball
+import gameboard.drawable.BallFactory
 import gameboard.drawable.Drawable
 import java.awt.Dimension
 import java.awt.Graphics
@@ -27,17 +27,18 @@ class PinBall {
 
 class GameBoard : JPanel(), ActionListener {
     private val timer = Timer(16, this)
-    private val drawableList = mutableListOf<Drawable>(Ball(panel = this))
+    private val drawableList = mutableListOf<Drawable>()
+    private val ballFactory = BallFactory(drawableList)
 
     fun start() {
         timer.start()
+        ballFactory.create(this)
     }
 
-    override fun paintComponent(g: Graphics?) {
-        super.paintComponent(g)
-        println("draw: $drawableList")
+    override fun paintComponent(graphics: Graphics?) {
+        super.paintComponent(graphics)
         for (drawable in drawableList) {
-            g?.let { drawable.draw(it) }
+            graphics?.let { drawable.draw(it) }
         }
     }
 
