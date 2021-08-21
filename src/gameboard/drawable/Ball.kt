@@ -10,11 +10,13 @@ class Ball(
     private var y: Double = 0.0,
     private var vx: Double = 15.0,
     private var vy: Double = -15.0,
+    private var lifespan: Int = 600,
     val color: Color = Color.DARK_GRAY,
     private val panel: JPanel
 ) : Drawable {
     private val e = 0.8
     private val g = 0.5
+    override var isDead = false
 
     override fun draw(graphics: Graphics) {
         val prevColor = graphics.color
@@ -54,6 +56,10 @@ class Ball(
             y = height - r
             vy = -vy * e
         }
+
+        lifespan--
+        if (lifespan <= 0)
+            isDead = true
 
         // 画面下向きの加速度
         vy += g

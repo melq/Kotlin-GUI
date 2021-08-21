@@ -30,6 +30,7 @@ class BallFactory(private val drawableList: MutableList<Drawable>) : Factory() {
                 Ball(r, x, y,
                     (random.nextInt(30) - 15).toDouble(),
                     (random.nextInt(15) - 15).toDouble(),
+                    600,
                     Color(
                         random.nextInt(256),
                         random.nextInt(256),

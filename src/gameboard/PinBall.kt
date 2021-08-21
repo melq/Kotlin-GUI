@@ -47,8 +47,15 @@ class GameBoard : JPanel(), ActionListener, MouseListener {
     }
 
     override fun actionPerformed(e: ActionEvent?) {
-        for (drawable in drawableList)
-            drawable.next()
+        var i = 0
+        while (i < drawableList.size) {
+            drawableList[i].next()
+            if (drawableList[i].isDead) {
+                drawableList.removeAt(i)
+                i--
+            }
+            i++
+        }
         repaint()
     }
 
