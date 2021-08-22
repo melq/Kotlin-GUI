@@ -6,10 +6,10 @@ import javax.swing.JPanel
 
 class Ball(
     private val r: Double = 10.0,
-    private var x: Double = 0.0,
-    private var y: Double = 0.0,
-    private var vx: Double = 15.0,
-    private var vy: Double = -15.0,
+    var x: Double = 0.0,
+    var y: Double = 0.0,
+    var vx: Double = 15.0,
+    var vy: Double = -15.0,
     private var lifespan: Int = 600,
     val color: Color = Color.DARK_GRAY,
     private val panel: JPanel
@@ -17,6 +17,11 @@ class Ball(
     private val e = 0.8
     private val g = 0.5
     override var isDead = false
+
+    fun setDimension(x: Double, y: Double) {
+        this.x = x
+        this.y = y
+    }
 
     override fun draw(graphics: Graphics) {
         val prevColor = graphics.color
