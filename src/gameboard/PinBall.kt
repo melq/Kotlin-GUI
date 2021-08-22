@@ -3,6 +3,7 @@ package gameboard
 import gameboard.drawable.Ball
 import gameboard.drawable.BallFactory
 import gameboard.drawable.Drawable
+import gameboard.drawable.Position
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.event.*
@@ -30,8 +31,8 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
     private val drawableList = mutableListOf<Drawable>()
     private val ballFactory = BallFactory(drawableList)
 
-    private var pressedX = 0; private var mouseX = 0
-    private var pressedY = 0; private var mouseY = 0
+    private val pressedPosition = Position(0, 0)
+    private val currentPosition = Position(0, 0)
     private var holdingBall: Ball? = null
 
     fun start() {
@@ -49,7 +50,10 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
             }
             holdingBall?.let { ball ->
                 ball.draw(g)
-                g.drawLine(pressedX, pressedY, mouseX, mouseY)
+                g.drawLine(pressedPosition.x,
+                    pressedPosition.y,
+                    currentPosition.x,
+                    currentPosition.y)
             }
         }
     }
@@ -70,16 +74,17 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
     override fun mouseClicked(e: MouseEvent?) { }
 
     override fun mousePressed(e: MouseEvent?) {
-        pressedX = e!!.x
-        pressedY = e.y
+        pressedPosition.x= e!!.x
+        pressedPosition.y = e.y
 
         when (e.button) {
             MouseEvent.BUTTON1 -> {
-                ballFactory.randomBalls(x = pressedX.toDouble(), y = pressedY.toDouble(), panel = this)
+                ballFactory.randomBalls(x = pressedPosition.x.toDouble(),
+                    y = pressedPosition.y.toDouble(), panel = this)
             }
             MouseEvent.BUTTON3 -> {
                 holdingBall = ballFactory.createDrawable(this) as Ball
-                holdingBall!!.setDimension(pressedX.toDouble(), pressedY.toDouble())
+                holdingBall!!.setPosition(pressedPosition.x.toDouble(), pressedPosition.y.toDouble())
             }
         }
     }
@@ -87,8 +92,8 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
     override fun mouseReleased(e: MouseEvent?) {
         when (e!!.button) {
             MouseEvent.BUTTON3 -> {
-                holdingBall?.vx = 0.2 * (pressedX - e.x)
-                holdingBall?.vy = 0.2 * (pressedY - e.y)
+                holdingBall?.vx = 0.2 * (pressedPosition.x - e.x)
+                holdingBall?.vy = 0.2 * (pressedPosition.y - e.y)
                 holdingBall?.let { drawableList.add(it) }
                 holdingBall = null
             }
@@ -98,12 +103,12 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
     override fun mouseExited(e: MouseEvent?) { }
 
     override fun mouseDragged(e: MouseEvent?) {
-        mouseX = e!!.x
-        mouseY = e.y
+        currentPosition.x = e!!.x
+        currentPosition.y = e.y
     }
 
     override fun mouseMoved(e: MouseEvent?) {
-        mouseX = e!!.x
-        mouseY = e.y
+        currentPosition.x = e!!.x
+        currentPosition.y = e.y
     }
 }

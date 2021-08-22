@@ -18,7 +18,7 @@ class Ball(
     private val g = 0.5
     override var isDead = false
 
-    fun setDimension(x: Double, y: Double) {
+    fun setPosition(x: Double, y: Double) {
         this.x = x
         this.y = y
     }
