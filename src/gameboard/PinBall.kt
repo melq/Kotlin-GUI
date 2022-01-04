@@ -49,11 +49,16 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
                 drawable.draw(g)
             }
             holdingBall?.let { ball ->
+                if (pressedPosition == currentPosition) {
+                    ball.r *= 1.05
+                } else {
+                    g.drawLine(
+                        pressedPosition.x,
+                        pressedPosition.y,
+                        currentPosition.x,
+                        currentPosition.y)
+                }
                 ball.draw(g)
-                g.drawLine(pressedPosition.x,
-                    pressedPosition.y,
-                    currentPosition.x,
-                    currentPosition.y)
             }
         }
     }
@@ -74,7 +79,7 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
     override fun mouseClicked(e: MouseEvent?) { }
 
     override fun mousePressed(e: MouseEvent?) {
-        pressedPosition.x= e!!.x
+        pressedPosition.x = e!!.x
         pressedPosition.y = e.y
 
         when (e.button) {
@@ -94,7 +99,7 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
             MouseEvent.BUTTON3 -> {
                 holdingBall?.vx = 0.2 * (pressedPosition.x - e.x)
                 holdingBall?.vy = 0.2 * (pressedPosition.y - e.y)
-                holdingBall?.let { drawableList.add(it) }
+                holdingBall?.let { ballFactory.registerDrawable(it) }
                 holdingBall = null
             }
         }

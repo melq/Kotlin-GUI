@@ -5,7 +5,7 @@ import java.awt.Graphics
 import javax.swing.JPanel
 
 class Ball(
-    private val r: Double = 10.0,
+    var r: Double = 10.0,
     var x: Double = 0.0,
     var y: Double = 0.0,
     var vx: Double = 15.0,
@@ -15,7 +15,7 @@ class Ball(
     private val panel: JPanel
 ) : Drawable {
     private val e = 0.8
-    private val g = 0.5
+    private val g = 4.9
     override var isDead = false
 
     fun setPosition(x: Double, y: Double) {
