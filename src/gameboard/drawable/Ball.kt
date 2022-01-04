@@ -15,7 +15,7 @@ class Ball(
     private val panel: JPanel
 ) : Drawable {
     private val e = 0.8
-    private val g = 4.9
+    private val g = 2.45
     override var isDead = false
 
     fun setPosition(x: Double, y: Double) {

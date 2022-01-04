@@ -31,6 +31,7 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
     private val drawableList = mutableListOf<Drawable>()
     private val ballFactory = BallFactory(drawableList)
 
+    private var isLeftPressed = false
     private val pressedPosition = Position(0, 0)
     private val currentPosition = Position(0, 0)
     private var holdingBall: Ball? = null
@@ -47,6 +48,11 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
         graphics?.let { g ->
             for (drawable in drawableList) {
                 drawable.draw(g)
+            }
+            if (isLeftPressed) {
+                ballFactory.randomBalls(
+                    x = currentPosition.x.toDouble(),
+                    y = currentPosition.y.toDouble(), panel = this)
             }
             holdingBall?.let { ball ->
                 if (pressedPosition == currentPosition) {
@@ -84,9 +90,11 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
 
         when (e.button) {
             MouseEvent.BUTTON1 -> {
-                ballFactory.randomBalls(x = pressedPosition.x.toDouble(),
-                    y = pressedPosition.y.toDouble(), panel = this)
+                isLeftPressed = true
             }
+//            MouseEvent.BUTTON2 -> {
+//                drawableList.clear()
+//            }
             MouseEvent.BUTTON3 -> {
                 holdingBall = ballFactory.createDrawable(this) as Ball
                 holdingBall!!.setPosition(pressedPosition.x.toDouble(), pressedPosition.y.toDouble())
@@ -96,6 +104,9 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
 
     override fun mouseReleased(e: MouseEvent?) {
         when (e!!.button) {
+            MouseEvent.BUTTON1 -> {
+                isLeftPressed = false
+            }
             MouseEvent.BUTTON3 -> {
                 holdingBall?.vx = 0.2 * (pressedPosition.x - e.x)
                 holdingBall?.vy = 0.2 * (pressedPosition.y - e.y)
