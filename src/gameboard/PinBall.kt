@@ -92,9 +92,9 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
             MouseEvent.BUTTON1 -> {
                 isLeftPressed = true
             }
-//            MouseEvent.BUTTON2 -> {
-//                drawableList.clear()
-//            }
+            MouseEvent.BUTTON2 -> {
+                drawableList.clear()
+            }
             MouseEvent.BUTTON3 -> {
                 holdingBall = ballFactory.createDrawable(this) as Ball
                 holdingBall!!.setPosition(pressedPosition.x.toDouble(), pressedPosition.y.toDouble())
