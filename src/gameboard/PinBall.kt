@@ -27,11 +27,11 @@ class PinBall {
 }
 
 class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
-    private val timer = Timer(16, this)
+    private val timer = Timer(30, this)
     private val drawableList = mutableListOf<Drawable>()
     private val ballFactory = BallFactory(drawableList)
 
-    private var isLeftPressed = false
+    private var isLeftPressed = false; private var pressCount = 0
     private val pressedPosition = Position(0, 0)
     private val currentPosition = Position(0, 0)
     private var holdingBall: Ball? = null
@@ -49,27 +49,29 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
             for (drawable in drawableList) {
                 drawable.draw(g)
             }
-            if (isLeftPressed) {
-                ballFactory.randomBalls(
-                    x = currentPosition.x.toDouble(),
-                    y = currentPosition.y.toDouble(), panel = this)
-            }
             holdingBall?.let { ball ->
                 if (pressedPosition == currentPosition) {
                     ball.r *= 1.05
-                } else {
+                }
                     g.drawLine(
                         pressedPosition.x,
                         pressedPosition.y,
                         currentPosition.x,
                         currentPosition.y)
-                }
                 ball.draw(g)
             }
         }
     }
 
     override fun actionPerformed(e: ActionEvent?) {
+        if (isLeftPressed) {
+            if (pressCount % 5 == 0)
+                ballFactory.randomBalls(
+                x = currentPosition.x.toDouble(),
+                y = currentPosition.y.toDouble(),
+                panel = this)
+            pressCount++
+        }
         var i = 0
         while (i < drawableList.size) {
             drawableList[i].next()
@@ -106,6 +108,7 @@ class GameBoard : JPanel(), ActionListener, MouseListener, MouseMotionListener {
         when (e!!.button) {
             MouseEvent.BUTTON1 -> {
                 isLeftPressed = false
+                pressCount = 0
             }
             MouseEvent.BUTTON3 -> {
                 holdingBall?.vx = 0.2 * (pressedPosition.x - e.x)
